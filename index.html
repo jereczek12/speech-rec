@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Web Speech API Demo</title>
+    <title>PAI speech-rec</title>
     <style>
       body
       {
@@ -55,8 +55,6 @@
     <label><input type="radio" name="recognition-type" value="final" checked="checked" /> Final only</label>
     <label><input type="radio" name="recognition-type" value="interim" /> Interim</label>
 
-    <h3>Log</h3>
-    <div id="log"></div>
 
     <div class="buttons-wrapper">
       <button id="button-play-ws" class="button-demo">Play demo</button>
@@ -78,7 +76,6 @@
       } else {
         var recognizer = new window.SpeechRecognition();
         var transcription = document.getElementById('transcription');
-        var log = document.getElementById('log');
 
         // Recogniser doesn't stop listening even if the user pauses
         recognizer.continuous = true;
@@ -93,13 +90,10 @@
             } else {
               transcription.textContent += event.results[i][0].transcript;
             }
+            changeColor(event.results[i][0].transcript);
           }
         };
 
-        // Listen for errors
-        recognizer.onerror = function(event) {
-          log.innerHTML = 'Recognition error: ' + event.message + '<br />' + log.innerHTML;
-        };
 
         document.getElementById('button-play-ws').addEventListener('click', function() {
           // Set if we need interim results
@@ -107,22 +101,21 @@
 
           try {
             recognizer.start();
-            log.innerHTML = 'Recognition started' + '<br />' + log.innerHTML;
           } catch(ex) {
-            log.innerHTML = 'Recognition error: ' + ex.message + '<br />' + log.innerHTML;
           }
         });
 
         document.getElementById('button-stop-ws').addEventListener('click', function() {
           recognizer.stop();
-          log.innerHTML = 'Recognition stopped' + '<br />' + log.innerHTML;
         });
 
         document.getElementById('clear-all').addEventListener('click', function() {
           transcription.textContent = '';
-          log.textContent = '';
         });
       }
+      function changeColor(color) {
+            document.body.style.background = color;
+        }
     </script>
   </body>
 </html>
